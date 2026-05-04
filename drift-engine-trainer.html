@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drift Engine — Training Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+
+<style>
+  /* ── Theme ── */
+  :root {
+    --bg:          hsl(230, 35%, 8%);
+    --bg-2:        hsl(230, 30%, 11%);
+    --fg:          hsl(40, 28%, 88%);
+    --fg-muted:    hsl(40, 18%, 65%);
+    --gold:        hsl(44, 72%, 55%);
+    --gold-dim:    hsl(44, 45%, 38%);
+    --card-bg:     hsl(38, 30%, 87%);
+    --card-fg:     hsl(230, 40%, 13%);
+    --card-border: hsl(38, 28%, 74%);
+    --card-muted:  hsl(230, 20%, 32%);
+    --border:      hsl(230, 22%, 20%);
+
+    /* Per-bank accent colors (subtle) */
+    --b1: hsl(44,  70%, 55%);   /* Conjunctions   — gold */
+    --b2: hsl(190, 55%, 52%);   /* Soft Qualifiers — teal */
+    --b3: hsl(280, 45%, 62%);   /* Nominalizations — violet */
+    --b4: hsl(160, 50%, 50%);   /* Unspecified Verbs — green */
+    --b5s: hsl(30, 65%, 55%);   /* Sensory — amber */
+    --b5a: hsl(210, 50%, 55%);  /* Atmospheric — steel blue */
+    --b5e: hsl(340, 45%, 58%);  /* Emotional — rose */
+    --b5f: hsl(170, 50%, 48%);  /* Flow — seafoam */
+    --b5t: hsl(22,  55%, 52%);  /* Texture — terracotta */
+    --b5l: hsl(55,  55%, 52%);  /* Light/Shadow — straw */
+    --b5adv: hsl(240, 40%, 60%);/* Adverbs — indigo */
+    --b6: hsl(200, 55%, 52%);   /* Temporal — cerulean */
+    --b7: hsl(10,  60%, 55%);   /* -ing Engine — coral */
+    --b8: hsl(270, 45%, 58%);   /* Syntax — lavender */
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Crimson Pro', 'Georgia', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.028;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* ── Layout ── */
+  .app {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  /* ── Header ── */
+  header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+    opacity: 0.9;
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: var(--fg);
+    margin-bottom: 0.5rem;
+  }
+
+  header p {
+    font-family: 'Crimson Pro', serif;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--fg-muted);
+    font-size: 1rem;
+  }
+
+  /* ── Controls bar ── */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .btn-deal {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    background: transparent;
+    border: 1px solid var(--gold-dim);
+    color: var(--gold);
+    padding: 0.6rem 1.6rem;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .btn-deal:hover {
+    background: hsla(44, 60%, 50%, 0.1);
+    border-color: var(--gold);
+    box-shadow: 0 0 18px hsla(44, 70%, 55%, 0.15);
+  }
+
+  .hand-info {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-left: auto;
+  }
+
+  /* ── Bank filter pills ── */
+  .filter-section {
+    margin-bottom: 2.5rem;
+  }
+  .filter-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+  .filter-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--fg-muted);
+    padding: 0.3rem 0.75rem;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .pill.active {
+    color: var(--card-bg);
+    border-color: transparent;
+  }
+  .pill[data-bank="b1"].active  { background: var(--b1);   }
+  .pill[data-bank="b2"].active  { background: var(--b2);   }
+  .pill[data-bank="b3"].active  { background: var(--b3);   }
+  .pill[data-bank="b4"].active  { background: var(--b4);   }
+  .pill[data-bank="b5s"].active { background: var(--b5s);  }
+  .pill[data-bank="b5a"].active { background: var(--b5a);  }
+  .pill[data-bank="b5e"].active { background: var(--b5e);  }
+  .pill[data-bank="b5f"].active { background: var(--b5f);  }
+  .pill[data-bank="b5t"].active { background: var(--b5t);  }
+  .pill[data-bank="b5l"].active { background: var(--b5l);  }
+  .pill[data-bank="b5adv"].active { background: var(--b5adv); }
+  .pill[data-bank="b6"].active  { background: var(--b6);   }
+  .pill[data-bank="b7"].active  { background: var(--b7);   }
+  .pill[data-bank="b8"].active  { background: var(--b8);   }
+
+  /* ── Hand size control ── */
+  .size-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+  }
+  .size-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+  .size-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--fg-muted);
+    width: 1.8rem; height: 1.8rem;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .size-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+  .size-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--fg);
+    min-width: 1.5rem;
+    text-align: center;
+  }
+
+  /* ── Card Grid ── */
+  .hand {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--card-bg);
+    color: var(--card-fg);
+    border: 1px solid var(--card-border);
+    border-radius: 3px;
+    padding: 1.4rem 1.5rem 1.4rem;
+    min-height: 15rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2);
+    cursor: default;
+    transition: transform 0.18s, box-shadow 0.18s;
+    animation: cardIn 0.3s ease both;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.25);
+  }
+
+  /* Noise texture on card */
+  .card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+  }
+
+  /* Color accent bar at top */
+  .card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    opacity: 0.7;
+  }
+  .card[data-bank="b1"]::after   { background: var(--b1);    }
+  .card[data-bank="b2"]::after   { background: var(--b2);    }
+  .card[data-bank="b3"]::after   { background: var(--b3);    }
+  .card[data-bank="b4"]::after   { background: var(--b4);    }
+  .card[data-bank="b5s"]::after  { background: var(--b5s);   }
+  .card[data-bank="b5a"]::after  { background: var(--b5a);   }
+  .card[data-bank="b5e"]::after  { background: var(--b5e);   }
+  .card[data-bank="b5f"]::after  { background: var(--b5f);   }
+  .card[data-bank="b5t"]::after  { background: var(--b5t);   }
+  .card[data-bank="b5l"]::after  { background: var(--b5l);   }
+  .card[data-bank="b5adv"]::after{ background: var(--b5adv); }
+  .card[data-bank="b6"]::after   { background: var(--b6);    }
+  .card[data-bank="b7"]::after   { background: var(--b7);    }
+  .card[data-bank="b8"]::after   { background: var(--b8);    }
+
+  /* Card header row */
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.2rem;
+    opacity: 0.55;
+    transition: opacity 0.15s;
+  }
+  .card:hover .card-header { opacity: 1; }
+
+  .card-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    color: var(--card-muted);
+  }
+  .card-cat {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--card-muted);
+  }
+
+  /* Card center word */
+  .card-word {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0;
+  }
+  .card-word h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 4vw, 2.1rem);
+    font-weight: 400;
+    text-align: center;
+    line-height: 1.2;
+    color: var(--card-fg);
+    letter-spacing: 0.01em;
+  }
+  /* Italic style for soft qualifiers and longer phrases */
+  .card-word h2.phrase {
+    font-size: clamp(1.1rem, 3vw, 1.45rem);
+    font-style: italic;
+  }
+
+  /* Card footer */
+  .card-footer {
+    margin-top: 1rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid hsla(230, 30%, 20%, 0.18);
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.88rem;
+    font-weight: 300;
+    line-height: 1.55;
+    color: var(--card-muted);
+  }
+  .card-desc {
+    margin-bottom: 0.6rem;
+  }
+  .card-example {
+    font-style: italic;
+    font-size: 0.82rem;
+    opacity: 0.75;
+    line-height: 1.5;
+  }
+
+  /* ── Empty state ── */
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 1rem;
+    color: var(--fg-muted);
+    font-style: italic;
+    font-size: 1rem;
+  }
+
+  /* ── Focus mode overlay ── */
+  .focus-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: hsla(230, 35%, 5%, 0.92);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+    padding: 2rem;
+  }
+  .focus-overlay.visible { display: flex; }
+
+  .focus-inner {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+  }
+
+  .focus-card {
+    background: var(--card-bg);
+    color: var(--card-fg);
+    border: 1px solid var(--card-border);
+    border-radius: 3px;
+    padding: 2.5rem 2.5rem 2rem;
+    min-height: 22rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  }
+
+  .focus-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.035;
+    pointer-events: none;
+  }
+
+  .focus-card .card-header { margin-bottom: 1.8rem; }
+  .focus-card .card-word h2 { font-size: clamp(2rem, 6vw, 3rem); }
+  .focus-card .card-word h2.phrase { font-size: clamp(1.4rem, 4vw, 1.9rem); }
+  .focus-card .card-footer { font-size: 0.94rem; }
+  .focus-card .card-example { font-size: 0.88rem; }
+
+  .focus-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+  }
+
+  .focus-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--fg-muted);
+    padding: 0.45rem 1rem;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .focus-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+  .focus-btn:disabled { opacity: 0.25; cursor: default; }
+  .focus-btn:disabled:hover { border-color: var(--border); color: var(--fg-muted); }
+
+  .focus-close {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    background: transparent;
+    border: none;
+    color: var(--fg-muted);
+    cursor: pointer;
+    padding: 0.5rem;
+    position: absolute;
+    top: -2.2rem;
+    right: 0;
+    transition: color 0.15s;
+  }
+  .focus-close:hover { color: var(--fg); }
+
+  .focus-counter {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    color: var(--fg-muted);
+  }
+
+  /* ── Mode toggle ── */
+  .mode-toggle {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--fg-muted);
+    padding: 0.4rem 0.9rem;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .mode-toggle:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+  /* ── Animations ── */
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Footer ── */
+  .deck-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .deck-footer span {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    opacity: 0.5;
+  }
+
+  /* Responsive */
+  @media (max-width: 500px) {
+    .controls { flex-direction: column; align-items: flex-start; }
+    .hand-info, .size-controls { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <div class="header-eyebrow">The Bandler Drift Engine</div>
+    <h1>Training Deck</h1>
+    <p>Shuffle the banks. Build the sentences. Carry it in your head.</p>
+  </header>
+
+  <!-- Controls -->
+  <div class="controls">
+    <button class="btn-deal" id="dealBtn">Deal a new hand</button>
+    <button class="mode-toggle" id="modeBtn">⊞ Focus mode</button>
+    <div class="size-controls">
+      <span class="size-label">Hand</span>
+      <button class="size-btn" id="sizeDown">−</button>
+      <span class="size-val" id="sizeVal">6</span>
+      <button class="size-btn" id="sizeUp">+</button>
+    </div>
+    <span class="hand-info" id="handInfo">HAND 001</span>
+  </div>
+
+  <!-- Bank Filters -->
+  <div class="filter-section">
+    <span class="filter-label">Draw from banks</span>
+    <div class="filter-pills" id="filterPills"></div>
+  </div>
+
+  <!-- Card Hand -->
+  <div class="hand" id="hand"></div>
+
+  <!-- Footer -->
+  <div class="deck-footer">
+    <span>Drift Engine — NLP Training Tool</span>
+    <span id="deckCount">— cards in deck</span>
+  </div>
+
+</div><!-- .app -->
+
+<!-- Focus Mode Overlay -->
+<div class="focus-overlay" id="focusOverlay">
+  <div class="focus-inner">
+    <button class="focus-close" id="focusClose">✕ close</button>
+    <div class="focus-card" id="focusCard">
+      <!-- populated by JS -->
+    </div>
+    <div class="focus-nav">
+      <button class="focus-btn" id="focusPrev">← prev</button>
+      <span class="focus-counter" id="focusCounter">1 / 6</span>
+      <button class="focus-btn" id="focusNext">next →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+//  CARD DATA
+// ─────────────────────────────────────────────
+
+const BANKS = {
+  b1: {
+    label: 'Bank 1',
+    cat: 'Conjunction',
+    color: 'b1',
+    cards: [
+      { word: 'while', desc: 'Hinge two clauses together — the listener follows the first straight into the second with no room to resist.', ex: '"...the plate kept turning quietly, while the lightbulb steadily flickered inside the dim microwave."' },
+      { word: 'as', desc: 'Tie two simultaneous events together so tightly the mind merges them into a single experience.', ex: '"...as the dust settled slowly on the windowsill, something in the room began to ease."' },
+      { word: 'because', desc: 'Offer causality and the critical mind accepts the chain without checking whether it holds.', ex: '"...and you began to relax, because the light through the curtains was warm and still."' },
+      { word: 'since', desc: 'A softer causality — offers a reason without insisting on it, letting the listener supply the logic themselves.', ex: '"...since the room had grown quieter, it was easier to let everything settle."' },
+      { word: 'although', desc: 'Acknowledge a contrary thought and dissolve it in the same breath — the resistance has nowhere to stand.', ex: '"...although you hadn\'t expected it, the afternoon had stretched out longer than anyone planned."' },
+      { word: 'even though', desc: 'Stronger than although — explicitly validates the counter-thought before letting it dissolve.', ex: '"...even though the wheel kept turning on its own, it didn\'t feel strange, just continuous."' },
+      { word: 'until', desc: 'Stretches the present moment toward a resolution that never quite arrives — suspending the listener in between.', ex: '"...and the coin kept spinning on the counter until the light from the window caught it."' },
+      { word: 'before', desc: 'Pulls the mind slightly ahead of the present moment, creating gentle forward motion.', ex: '"...before I quite knew it, the afternoon had already begun to shift."' },
+      { word: 'after', desc: 'Anchors a state by placing it inside a sequence — it already happened, the mind stops resisting it.', ex: '"...after the sound faded from the room, there was this quiet that seemed to hold everything."' },
+      { word: 'once', desc: 'Conditions a state on a threshold that implies it will cross — the mind leans into the crossing.', ex: '"...once the pendulum found its rhythm, the room felt different than before."' },
+      { word: 'whenever', desc: 'Makes a state habitual and inevitable — not one event but a pattern the mind now expects.', ex: '"...whenever the breeze came through the window, the curtain moved in the same slow way."' },
+      { word: 'just as', desc: 'Creates perfect simultaneity — two things happening at exactly the same moment, fusing their meanings.', ex: '"...just as the flame straightened itself, something in the air of the room changed."' },
+      { word: 'the moment', desc: 'Collapses time to a single edge — everything pivots exactly there, and the listener is inside the pivot.', ex: '"...the moment the hinge gave, the door drifted open on its own."' },
+      { word: 'every time', desc: 'Transforms a single event into a law — the pattern is now built into the world.', ex: '"...every time the needle moved, it pulled the thread a little further through."' },
+      { word: 'as long as', desc: 'Conditions a state on a background that\'s already true — the state is therefore already in effect.', ex: '"...as long as the water kept pouring, the sound made everything else easy to ignore."' },
+      { word: 'as soon as', desc: 'Creates an immediate trigger-response link — action A causes state B without any gap.', ex: '"...as soon as the candle was lit, the shadows in the corners began to soften."' },
+      { word: 'by the time', desc: 'Presupposes the state will arrive — only the timing is open, not whether it happens.', ex: '"...by the time I looked up again, the room had changed in some way I couldn\'t quite name."' },
+      { word: 'now that', desc: 'Presents a new fact as already established — the state it describes is treated as given.', ex: '"...now that the window was open, the air had a different quality to it."' },
+      { word: 'unless', desc: 'Implies that the default case is already happening — only the exception could disrupt it.', ex: '"...unless the coin stopped spinning entirely, there was no reason to look away."' },
+      { word: 'even if', desc: 'Removes every condition that might prevent the state — what remains is the state, inevitable.', ex: '"...even if you weren\'t sure why, the weight of the afternoon kept settling."' },
+      { word: 'whereas', desc: 'Draws a quiet contrast that reframes — the listener sees the difference without being told what to do with it.', ex: '"...whereas the first room had been still, this one held a low, continuous hum."' },
+      { word: 'as if', desc: 'Invites the mind to simulate a state through hypothetical reality — more vivid than description, more flexible than assertion.', ex: '"...and the floor seemed to give just slightly, as if the whole building had exhaled."' },
+      { word: 'as though', desc: 'Slightly more formal than as if — offers a simile at the level of felt truth rather than observation.', ex: '"...the silence had a texture to it, as though the room were holding something in reserve."' },
+    ]
+  },
+
+  b2: {
+    label: 'Bank 2',
+    cat: 'Soft Qualifier',
+    color: 'b2',
+    cards: [
+      { word: 'it felt like', desc: 'Grounds the statement in sensation rather than fact — the critical mind has nothing solid to push against.', ex: '"...it felt like the ceiling had risen slightly, or maybe everything else had settled lower."' },
+      { word: 'it seemed like', desc: 'Reports a perception without claiming it as truth — leaves the door open, and the listener walks through.', ex: '"...it seemed like the afternoon had been going on for longer than the clock suggested."' },
+      { word: 'it looked as if', desc: 'Soften a statement until the conscious mind has nothing solid to push against — and the edges of time blur.', ex: '"...it looked as if the light had shifted again, though no one had touched the lamp."' },
+      { word: 'somehow', desc: 'The most compact qualifier — acknowledges that something happened without explaining how, letting the listener fill the gap.', ex: '"...and somehow, by the time the hum faded, the tension had already left the room."' },
+      { word: 'in a way', desc: 'Hedges the comparison just enough that the critical mind lets it through, then the implication does the work.', ex: '"...in a way, the coin on the counter was still moving even after it had stopped."' },
+      { word: 'almost like', desc: 'Close enough to activate the simulation, far enough to escape scrutiny — the imagination completes it.', ex: '"...the surface of the water had this texture, almost like the light itself was resting on it."' },
+      { word: 'sort of', desc: 'Casual and disarming — the most natural hedge in spoken language, which is exactly why it works.', ex: '"...and the room sort of gathered itself, the way rooms do when everyone stops talking at once."' },
+      { word: 'in some way', desc: 'Deliberately vague — invites the listener to locate the truth of it in their own experience.', ex: '"...in some way I\'ve never been quite able to explain, the second time through felt different."' },
+      { word: 'there was something about it', desc: 'Creates a felt quality without naming it — the listener searches inward to find what the something is.', ex: '"...there was something about the way the door drifted open that made the whole room shift."' },
+      { word: 'it had this quality of', desc: 'Sets up a precise feel without defining it — the specificity is implied, not stated.', ex: '"...the afternoon light had this quality of suspension, as if it were between two things."' },
+      { word: 'without quite knowing why', desc: 'Explicitly removes the rational explanation, making the felt experience the only thing left to notice.', ex: '"...and without quite knowing why, I found I\'d already begun to settle into the chair."' },
+      { word: 'you could almost say', desc: 'Signals that what follows is more true than it sounds — the almost is a permission structure.', ex: '"...you could almost say the room had been expecting us, the way it arranged itself."' },
+      { word: 'if you could imagine', desc: 'Opens a collaborative space — the listener is now co-constructing the state rather than receiving it.', ex: '"...if you could imagine a weight that had no source, that\'s something like what the air felt like."' },
+      { word: 'for reasons you can\'t entirely explain', desc: 'Normalizes the inexplicable — tells the listener that not understanding is the correct response.', ex: '"...for reasons you can\'t entirely explain, the wheel kept your attention longer than it had any right to."' },
+      { word: 'not quite, but close to', desc: 'A deliberate approximation — the precision of the miss is what makes the comparison vivid.', ex: '"...not quite sleep, but close to it — the kind of stillness where the body stops reporting in."' },
+    ]
+  },
+
+  b3: {
+    label: 'Bank 3',
+    cat: 'Nominalization',
+    color: 'b3',
+    cards: [
+      { word: 'awareness', desc: 'Drop a process-as-noun and the listener must search inside to fill in what it means — the content is theirs.', ex: '"...and there was this awareness that arrived before I could name what I was aware of."' },
+      { word: 'understanding', desc: 'Frame indirectly: "there was a understanding" — the listener locates the understanding themselves, and it becomes real.', ex: '"...there was a quiet understanding that settled as the door drifted open on its own."' },
+      { word: 'curiosity', desc: 'Names the interior movement without triggering resistance — it\'s a state, not an instruction.', ex: '"...and before I decided anything, there was a brief curiosity pulling gently in one direction."' },
+      { word: 'realization', desc: 'Implies a turning point that has already happened — the listening is always catching up to it.', ex: '"...there was a realization forming, the kind that arrives before the words do."' },
+      { word: 'comfort', desc: 'The state arrives as a thing that was already there — the body receives it rather than reaching for it.', ex: '"...I had a comfort about it I hadn\'t had before, the way something settles after it\'s been set down."' },
+      { word: 'recognition', desc: 'Suggests the listener has encountered this before — the state is familiar, not foreign.', ex: '"...and there was this recognition, as if the room had already shown me this once."' },
+      { word: 'connection', desc: 'Nominalizes a relational experience — something linked without naming what to what.', ex: '"...there was a connection between the sound and the way the light moved, though I couldn\'t place it."' },
+      { word: 'relaxation', desc: 'The process becomes a thing — already arrived, already true, the body is just catching up.', ex: '"...there was a relaxation in the room that hadn\'t been there when we first walked in."' },
+      { word: 'clarity', desc: 'Names the felt shift in perception without defining its object — the listener locates it in their own experience.', ex: '"...something had shifted, and a clarity that had been waiting behind it came through."' },
+      { word: 'peace', desc: 'Arrives as an object already present — the listener finds it rather than working toward it.', ex: '"...there was a peace in that room that had nothing to do with the silence, exactly."' },
+      { word: 'openness', desc: 'Makes a state of receptivity into a noun — concrete and available, not an instruction to follow.', ex: '"...I noticed an openness I hadn\'t had at the start of it, the kind that comes on without announcement."' },
+      { word: 'trust', desc: 'Frames confidence as a found object — it\'s already there, waiting to be noticed.', ex: '"...and there was a trust in it I hadn\'t expected, the way you trust a surface that holds your weight."' },
+      { word: 'presence', desc: 'Locates the listener fully in the current moment without telling them to be there — they\'re already inside it.', ex: '"...there was a presence to the room that had nothing to do with anyone being in it."' },
+      { word: 'expansion', desc: 'Implies interior space growing — the listener experiences this as felt spaciousness, not a metaphor.', ex: '"...and there was this expansion that had been happening quietly, long before I noticed it."' },
+      { word: 'relief', desc: 'Names the felt release of held tension without requiring any specific content — the listener fills it with whatever they were holding.', ex: '"...something let go, and what was left had the quality of relief — full and quiet and specific."' },
+      { word: 'belonging', desc: 'Makes the experience of fit and rightness into a noun the listener can locate and hold.', ex: '"...there was a belonging to the place, as if it had been arranged for exactly this kind of afternoon."' },
+      { word: 'acceptance', desc: 'Frames a complex interior shift as a noun already present — the listener receives it rather than performing it.', ex: '"...and somewhere in the quiet, there was an acceptance of the whole thing that I hadn\'t arrived with."' },
+      { word: 'transformation', desc: 'Names the change process as an object — implies it is already underway, already in motion.', ex: '"...there was a transformation happening in the way the light fell across the counter."' },
+      { word: 'wisdom', desc: 'Locates knowing in the body and history rather than the reasoning mind — the listener already has it.', ex: '"...and there was a wisdom in the way it had been arranged that I hadn\'t noticed the first time."' },
+      { word: 'possibility', desc: 'Opens a space without filling it — the listener\'s imagination enters and furnishes it.', ex: '"...there was a possibility the afternoon hadn\'t had before — faint, but real, the way openings are."' },
+    ]
+  },
+
+  b4: {
+    label: 'Bank 4',
+    cat: 'Unspecified Verb',
+    color: 'b4',
+    cards: [
+      { word: 'notice', desc: 'Directs attention without specifying what will be found — the listener\'s mind searches inward to complete it.', ex: '"...and as the candle steadied, you begin to notice something the room had been holding."' },
+      { word: 'sense', desc: 'Below the threshold of naming — the listener experiences something real without being told what it is.', ex: '"...before you\'ve quite named it, you sense the quality of the air has changed."' },
+      { word: 'experience', desc: 'The most unspecified of all — refers to an interior event whose content only the listener can supply.', ex: '"...and you begin to experience something that had been waiting at the edge of the afternoon."' },
+      { word: 'realize', desc: 'Names a shift in knowing without specifying what is now known — the listener locates the content.', ex: '"...and somewhere in the turning, you realize the room has been quieter than you noticed."' },
+      { word: 'allow', desc: 'Invites rather than instructs — the listener chooses to let the state arrive, which means they already have.', ex: '"...and you allow it to settle, the way you allow a chair to take the weight."' },
+      { word: 'discover', desc: 'Implies the thing is already there, waiting — the listener finds what was always present.', ex: '"...as the motion continued, you discover a rhythm that had been running beneath the whole of it."' },
+      { word: 'shift', desc: 'Describes an interior movement without naming its direction — something moves, and the listener feels where.', ex: '"...and something begins to shift, the way a room shifts when the light changes without warning."' },
+      { word: 'drift', desc: 'Suggests movement without effort or intention — the listener goes along because there is no resistance to offer.', ex: '"...and your attention begins to drift, the way smoke drifts when there\'s no particular wind."' },
+      { word: 'settle', desc: 'Implies things finding their right place — the listener feels this as a slow, welcome resolution.', ex: '"...and as the sound faded, something in the room began to settle into itself."' },
+      { word: 'open', desc: 'An unspecified interior expansion — the listener fills in what opens, and it becomes specific to them alone.', ex: '"...and something about the way the candle flickered makes you open, before you\'ve quite named what."' },
+      { word: 'absorb', desc: 'The listener takes in without effort — experience enters and becomes part of them, without needing processing.', ex: '"...and you absorb it the way stone absorbs warmth — gradually, completely, without deciding to."' },
+      { word: 'ease', desc: 'Describes tension releasing without naming the tension — the listener locates what eases in their own body.', ex: '"...and you ease into it, the way afternoons ease into evenings without an obvious border."' },
+      { word: 'wonder', desc: 'Suspends judgment in favor of curiosity — creates a mild trance state through the posture of open questioning.', ex: '"...and you begin to wonder, without quite aiming the wondering at anything in particular."' },
+      { word: 'process', desc: 'Implies interior activity below the level of conscious direction — something is working without being told to.', ex: '"...and somewhere beneath the surface, you process it — the whole of it — at whatever pace works."' },
+      { word: 'perceive', desc: 'Slightly more formal — creates a sense of careful, deliberate attending that itself deepens the state.', ex: '"...and you begin to perceive a quality in the room that hadn\'t been available before."' },
+    ]
+  },
+
+  b5: {
+    label: 'Bank 5',
+    cat: 'Descriptors',
+    color: 'b5s',
+    cards: [
+      { word: 'hazy',          cat: 'Sensory Adj.',        desc: 'Stack three in front of a noun — the three-descriptor rule renders the image in high definition and pulls the listener in.', ex: '"...there was a hazy, diffuse, pale quality to the light that afternoon."' },
+      { word: 'shimmering',    cat: 'Sensory Adj.',        desc: 'Suggests active motion in a static scene — the image never fully settles, so attention follows it inward.', ex: '"...the glass had a shimmering, translucent, almost liquid quality where the light caught it."' },
+      { word: 'velvety',       cat: 'Sensory Adj.',        desc: 'Transfers tactile sensation to a visual or auditory object — the brain renders it in the body.', ex: '"...a velvety, dim, enveloping darkness had settled into the corners of the room."' },
+      { word: 'misty',         cat: 'Sensory Adj.',        desc: 'Blurs the edges of the scene — objects lose their hard definition and the mind fills in the rest.', ex: '"...the far end of the street had a misty, pale, indistinct quality, like a memory of the street."' },
+      { word: 'dreamlike',     cat: 'Sensory Adj.',        desc: 'Names the quality of the experience directly — once accepted, the listener organizes everything else accordingly.', ex: '"...the whole thing had taken on a dreamlike, unhurried, weightless quality."' },
+      { word: 'weightless',    cat: 'Sensory Adj.',        desc: 'Transfers physical sensation to an entire scene — the listener\'s body begins to adjust toward the described state.', ex: '"...and there was a weightless, suspended, almost hovering quality to the way it all hung there."' },
+      { word: 'radiant',       cat: 'Sensory Adj.',        desc: 'Light emanating outward — a quality that expands the perceived space and softens what it touches.', ex: '"...the surface had a radiant, warm, luminous quality that had nothing to do with the lamp."' },
+      { word: 'translucent',   cat: 'Sensory Adj.',        desc: 'Between opaque and transparent — the image is visible but unresolved, which is precisely where attention stays.', ex: '"...the paper had a translucent, pale, fragile quality that made you careful with it."' },
+      { word: 'muted',         cat: 'Sensory Adj.',        desc: 'Turns down the intensity of the scene — everything present, but at a lower register that invites quiet attending.', ex: '"...the whole room had a muted, steady, softened quality, as if it had already found its level."' },
+      { word: 'blurred',       cat: 'Sensory Adj.',        desc: 'The edges of things lose definition — the brain moves inward when the outward image softens.', ex: '"...and at the edges, everything had a blurred, gradual, dissolving quality."' },
+      { word: 'cavernous',     cat: 'Atmospheric',         desc: 'One word that colors the air of an entire scene — the field everything else hangs in. Builds trance through atmosphere.', ex: '"...the old library felt cavernous and quiet, the kind of place that holds its breath."' },
+      { word: 'candlelit',     cat: 'Atmospheric',         desc: 'Immediately shifts the quality of attention — the brain enters a different perceptual mode.', ex: '"...the room had a candlelit, amber, close quality, as if the walls had moved in slightly."' },
+      { word: 'overcast',      cat: 'Atmospheric',         desc: 'Removes shadows entirely — the light comes from everywhere and nowhere, which is disorienting in the gentlest way.', ex: '"...the sky had an overcast, flat, suspended quality that made time harder to track."' },
+      { word: 'ethereal',      cat: 'Atmospheric',         desc: 'Signals the scene is at the edge of material reality — the listener adjusts their attention to match.', ex: '"...there was an ethereal, diffuse, hovering quality to the whole afternoon."' },
+      { word: 'fogbound',      cat: 'Atmospheric',         desc: 'Removes the far distance — the visible world contracts to what is immediately present.', ex: '"...the street had a fogbound, muffled, close quality that made everything else feel far away."' },
+      { word: 'twilight-like', cat: 'Atmospheric',         desc: 'Neither day nor night — the quality of in-between time, which is where the mind most easily drifts.', ex: '"...the room had a twilight-like, neither-here-nor-there quality by the time I noticed the clock."' },
+      { word: 'smoldering',    cat: 'Atmospheric',         desc: 'Heat without flame — implies something ongoing and slow beneath the surface of the visible.', ex: '"...there was a smoldering, deep, amber quality to the coals that hadn\'t needed any tending."' },
+      { word: 'ambient',       cat: 'Atmospheric',         desc: 'Sound or light that has no direction — it\'s simply in the room, everywhere and from nowhere.', ex: '"...the hum had an ambient, sourceless, continuous quality that had been there the whole time."' },
+      { word: 'echo-filled',   cat: 'Atmospheric',         desc: 'The space responds to itself — sound becomes an object that the room holds and returns.', ex: '"...the stairwell had an echo-filled, hollow, resonant quality that made every step sound careful."' },
+      { word: 'tranquil',      cat: 'Emotional-State',     desc: 'Use sparingly and indirectly — let the environment carry the word, not the person. The scene is tranquil; the listener arrives.', ex: '"...and the surface of the water had a tranquil, undisturbed, horizontal quality."' },
+      { word: 'wistful',       cat: 'Emotional-State',     desc: 'Gentle nostalgia without a specific object — the listener searches inward to find what it refers to.', ex: '"...there was a wistful, soft, backward-leaning quality to the light at that hour."' },
+      { word: 'receptive',     cat: 'Emotional-State',     desc: 'Applied to a place, not a person — implies the environment is ready to receive, which means something is about to arrive.', ex: '"...the room had a receptive, open, unhurried quality, as if it had been expecting someone."' },
+      { word: 'serene',        cat: 'Emotional-State',     desc: 'A state already achieved — place the word on the environment and the listener walks into it.', ex: '"...the garden had a serene, unmoving, perfectly-balanced quality in the flat midday light."' },
+      { word: 'yielding',      cat: 'Emotional-State',     desc: 'Resistance has already left — what remains is a quality of gentle giving-way that the listener experiences in their body.', ex: '"...the soil had a yielding, soft, accommodating quality that you noticed in your hands."' },
+      { word: 'inward',        cat: 'Emotional-State',     desc: 'Directs attention toward interior space — the scene references the inside without entering it.', ex: '"...the firelight had an inward, private, gathered quality, the kind that doesn\'t reach very far."' },
+      { word: 'grounded',      cat: 'Emotional-State',     desc: 'Applied to an object or place, not a person — the listener experiences the groundedness through the described thing.', ex: '"...the table had a grounded, solid, unmoving quality that the rest of the room organized itself around."' },
+      { word: 'fluid',         cat: 'Flow / Movement',     desc: 'Removes the sense of separate steps — experience becomes continuous, unbroken, like water finding its level.', ex: '"...the motion had a fluid, uninterrupted, seamless quality that made it hard to say where one movement ended."' },
+      { word: 'undulating',    cat: 'Flow / Movement',     desc: 'Wave-like, self-contained motion — the object breathes at its own rhythm, independent of anything outside it.', ex: '"...the fabric had an undulating, rhythmic, continuous quality in the slow air from the window."' },
+      { word: 'spiraling',     cat: 'Flow / Movement',     desc: 'Motion that deepens as it goes — the same path but always moving inward or downward.', ex: '"...and the smoke had a spiraling, slow, self-contained quality as it climbed toward the ceiling."' },
+      { word: 'drifting',      cat: 'Flow / Movement',     desc: 'Motion without direction — movement that has no destination, which means attention stays in the present of it.', ex: '"...the leaf had a drifting, unhurried, weightless quality on the surface of the water."' },
+      { word: 'hovering',      cat: 'Flow / Movement',     desc: 'Suspended between two states — neither moving nor still, which holds attention in the exact moment.', ex: '"...the dust in the shaft of light had a hovering, suspended, almost-weightless quality."' },
+      { word: 'oscillating',   cat: 'Flow / Movement',     desc: 'Back and forth, reliably — a rhythm that begins to entrain the listener\'s attention without them choosing it.', ex: '"...the pendulum had an oscillating, predictable, continuous quality that made watching it inevitable."' },
+      { word: 'seamless',      cat: 'Flow / Movement',     desc: 'No edges, no seams between moments — one experience flows into the next without a break.', ex: '"...the transition from one room to the next had a seamless, continuous, barely-noticeable quality."' },
+      { word: 'grainy',        cat: 'Texture / Tactile',   desc: 'Transfers texture to an image or memory — the brain renders it physically, which deepens the state.', ex: '"...there was a grainy, smooth, polished stone resting on the windowsill."' },
+      { word: 'plush',         cat: 'Texture / Tactile',   desc: 'A yielding, full, enveloping texture — the listener\'s body adjusts toward what it imagines touching.', ex: '"...the sound had a plush, deep, padded quality that the walls seemed to be holding."' },
+      { word: 'silky',         cat: 'Texture / Tactile',   desc: 'Frictionless and continuous — a quality that makes transition between states easy and expected.', ex: '"...the air had a silky, cool, almost liquid quality at that hour of the morning."' },
+      { word: 'mossy',         cat: 'Texture / Tactile',   desc: 'Organic, slightly damp, very still — implies something ancient and undisturbed, which creates deep atmospheric presence.', ex: '"...the stone wall had a mossy, cool, old quality that made the whole courtyard feel settled."' },
+      { word: 'suede-soft',    cat: 'Texture / Tactile',   desc: 'A specific kind of yield — matte and dense, not slick, with a resistance that gives just enough.', ex: '"...the light had a suede-soft, diffuse, warm quality that you could almost feel on your forearm."' },
+      { word: 'gauzy',         cat: 'Texture / Tactile',   desc: 'Thin, translucent, slightly floating — between material and not-material, which is where perception drifts.', ex: '"...the curtain had a gauzy, pale, barely-there quality that the afternoon light came straight through."' },
+      { word: 'flickering',    cat: 'Light / Shadow',      desc: 'Light that moves on its own schedule — the scene is never fully resolved, so attention stays tracking it.', ex: '"...the candle had a flickering, warm, amber quality that made the rest of the room feel deeper."' },
+      { word: 'haloed',        cat: 'Light / Shadow',      desc: 'Light gathered around a center, dimming toward the edge — the viewer\'s eye naturally moves inward toward the source.', ex: '"...the lamp had a haloed, soft, pooled quality that didn\'t reach the far corners of the room."' },
+      { word: 'opalescent',    cat: 'Light / Shadow',      desc: 'Color that shifts with angle — the eye keeps moving to find the right view, which is exactly what attention does in trance.', ex: '"...the glass had an opalescent, shifting, iridescent quality when the light moved across it."' },
+      { word: 'shadow-draped', cat: 'Light / Shadow',      desc: 'Puts shadow in the active role — it is doing something to the space, which makes the space feel inhabited.', ex: '"...the alcove was shadow-draped, quiet, and had a gathered, private quality to it."' },
+      { word: 'backlit',       cat: 'Light / Shadow',      desc: 'Source behind the object — edges glow, interiors go dark, and the viewer experiences the object as outline rather than mass.', ex: '"...the figure in the doorway was backlit, pale-edged, and impossible to quite make out."' },
+      { word: 'iridescent',    cat: 'Light / Shadow',      desc: 'Color that isn\'t fixed — the mind keeps trying to name it and can\'t, which holds attention in a kind of pleasant suspension.', ex: '"...the surface of the puddle had an iridescent, thin, continuously-shifting quality."' },
+      { word: 'low-glow',      cat: 'Light / Shadow',      desc: 'Light at its minimum — just enough to see by, which makes everything beyond the lit area feel important.', ex: '"...the hallway had a low-glow, amber, barely-lit quality that asked you to slow down."' },
+      { word: 'gradually',     cat: 'Adverb',              desc: 'Stretches the motion across time — the listener waits for the completion, which keeps them inside the experience longer.', ex: '"...and the wheel kept turning, gradually, on its own, without any assistance."' },
+      { word: 'effortlessly',  cat: 'Adverb',              desc: 'Removes the sense of work from the motion — what happens, happens naturally, which models ease for the listener.', ex: '"...the smoke moved effortlessly upward, in its own continuous spiral."' },
+      { word: 'briefly',       cat: 'Adverb',              desc: 'Drop one in front of a continuous verb to color how the motion lands — adverbs deepen trance.', ex: '"...and the pendulum kept swinging briefly, on its own, never quite stopping."' },
+      { word: 'quietly',       cat: 'Adverb',              desc: 'Reduces the volume of a scene — the listener adjusts their interior state to match.', ex: '"...and outside the window, something was quietly, continuously, finding its level."' },
+      { word: 'deeply',        cat: 'Adverb',              desc: 'Adds dimension to an interior movement — the process has been going on longer and further than the surface suggests.', ex: '"...something had been shifting deeply, without announcing itself, for longer than I\'d noticed."' },
+      { word: 'rhythmically',  cat: 'Adverb',              desc: 'Adds a steady pulse to the motion — the listener\'s nervous system begins to entrain with it.', ex: '"...the mechanism kept moving rhythmically, in its own uninterrupted pattern."' },
+      { word: 'continuously',  cat: 'Adverb',              desc: 'Removes any pause — the motion is ongoing and will remain ongoing, which is one definition of inevitability.', ex: '"...and the water kept pouring, continuously, from one surface to the next."' },
+      { word: 'dreamily',      cat: 'Adverb',              desc: 'Colors the quality of attention rather than the object — the listener is experiencing the adverb, not just reading it.', ex: '"...the afternoon had been moving dreamily, at a pace that didn\'t match the clock."' },
+      { word: 'softly',        cat: 'Adverb',              desc: 'Reduces force and pressure throughout the scene — the listener\'s body adjusts toward what it hears.', ex: '"...and the door had drifted softly, on its own, without anyone near it."' },
+      { word: 'steadily',      cat: 'Adverb',              desc: 'Implies unchanging, reliable motion — the listener can stop watching for interruption and simply be inside it.', ex: '"...the mechanism had been running steadily, in the background, the whole time."' },
+    ]
+  },
+
+  b6: {
+    label: 'Bank 6',
+    cat: 'Temporal Marker',
+    color: 'b6',
+    cards: [
+      { word: 'eventually', desc: 'Bends the listener\'s sense of when — blur the edges of time so past, now, and "about to" run together.', ex: '"...and eventually, without quite knowing when it had happened, the afternoon had finished."' },
+      { word: 'meanwhile', desc: 'Two things happening at once — time forks, and the listener holds both threads simultaneously.', ex: '"Meanwhile, the rain had begun falling before anyone in the room quite noticed."' },
+      { word: 'simultaneously', desc: 'Explicit simultaneity — collapses sequential time into a single moment where everything is happening at once.', ex: '"...and simultaneously, the flame steadied and the room grew quieter and something shifted."' },
+      { word: 'by then', desc: 'Presupposes a reference point already in the past — the listener locates themselves relative to it, which dislocates the present.', ex: '"...by then, the pattern had been going long enough that the body had found its own rhythm."' },
+      { word: 'sooner or later', desc: 'Makes the state inevitable — only the timing is open, not whether it arrives.', ex: '"...sooner or later, the spinning thing finds its natural rest, and you find yours with it."' },
+      { word: 'not quite yet', desc: 'Holds the listener at the edge of something — creates anticipation without fulfilling it, which is a kind of suspension.', ex: '"...not quite yet settled, but close — the kind of close where you can already feel the landing."' },
+      { word: 'already', desc: 'Presupposes a state has arrived before the listener consciously registered it — they\'re catching up to what\'s true.', ex: '"...and you realize, already, that something has been different for the last several minutes."' },
+      { word: 'beforehand', desc: 'References preparation that already happened — the listener has already been ready for what\'s coming.', ex: '"...beforehand, something in the room had shifted that made the whole afternoon feel arranged."' },
+      { word: 'shortly', desc: 'Very near future — creates a gentle forward lean toward an event that is about to resolve.', ex: '"...and shortly, the motion will find its natural edge, and everything will settle at once."' },
+      { word: 'unexpectedly', desc: 'Names the quality of surprise without the shock — the event arrived, the listener is inside it, and it turns out to be fine.', ex: '"...unexpectedly, a quiet had settled over the whole thing that made the rest easy."' },
+    ]
+  },
+
+  b7: {
+    label: 'Bank 7',
+    cat: '–ing Engine',
+    color: 'b7',
+    cards: [
+      { word: 'spiraling', desc: 'Pair two together to lock an object into perpetual, autonomous motion — the engine of the drift.', ex: '"...the smoke kept spiraling, slowly, in its own uninterrupted column."' },
+      { word: 'tumbling', desc: 'A continuous motion that is going somewhere but without direction — the listener follows without knowing where.', ex: '"...and the leaf kept tumbling, end over end, on the surface of the moving water."' },
+      { word: 'rotating', desc: 'A reliable, closed-loop motion — it returns to where it started, which creates a kind of hypnotic predictability.', ex: '"...the wheel just kept rotating, steadily, in the dim interior of the old machine."' },
+      { word: 'flickering', desc: 'Rapid, irregular, self-driven — the eye tracks it automatically, which is the beginning of everything.', ex: '"...the light kept flickering, never quite settling, in the far corner of the room."' },
+      { word: 'gliding', desc: 'Motion without friction — the object moves as if the medium is welcoming rather than resisting it.', ex: '"...the shadow kept gliding, steadily, across the wall as the sun continued its arc."' },
+      { word: 'undulating', desc: 'A wave the object carries within itself — not external force but internal rhythm.', ex: '"...the curtain kept undulating, slowly, in the warm air from the window."' },
+      { word: 'swelling', desc: 'Motion that grows — something is getting larger, fuller, more present, without stopping.', ex: '"...the sound kept swelling, gently, filling more of the room than it had a moment before."' },
+      { word: 'expanding', desc: 'Interior growth — space or sensation growing outward without effort, without direction, without end.', ex: '"...and the sensation kept expanding, gradually, further than I\'d thought it would go."' },
+      { word: 'contracting', desc: 'Counterpart to expanding — creates the breath-rhythm that can hold a listener for a very long time.', ex: '"...and outside the window the leaves just kept contracting, quietly, on their own."' },
+      { word: 'pouring', desc: 'Continuous flow that fills whatever space it meets — implies both motion and inevitability.', ex: '"...and the light kept pouring through the glass, slowly, across the whole length of the floor."' },
+      { word: 'sinking', desc: 'Downward, gradual, gentle — the listener\'s body registers this and follows, which is the mechanism.', ex: '"...and something in the chest kept sinking, slowly, into a place where it could stay."' },
+      { word: 'rising', desc: 'Upward drift — breath, attention, and lightness all move this direction simultaneously.', ex: '"...and the heat kept rising, in slow columns, from the surface of the stone."' },
+      { word: 'cascading', desc: 'Sequential release — one after another, each thing following the last, with no effort between them.', ex: '"...the water kept cascading down the stepped stones, one level to the next, without stopping."' },
+      { word: 'drifting', desc: 'The foundational motion — purposeless, directionless, going where the current takes it, and that\'s exactly right.', ex: '"...and the boat kept drifting, quietly, without anyone at the oars, into the open center."' },
+      { word: 'revolving', desc: 'Rotates around a center — the listener\'s attention orbits with it, staying close to the pivot.', ex: '"...the arm of the clock kept revolving, at its own pace, as if the afternoon had decided to cooperate."' },
+    ]
+  },
+
+  b8: {
+    label: 'Bank 8',
+    cat: 'Kinetic Syntax',
+    color: 'b8',
+    cards: [
+      { word: 'kept [verb]-ing', desc: 'Slot a continuous verb into the bracket — motion never resolves, and neither does the listener.', ex: '"...and the plate just kept turning inside the dim microwave, never quite coming to rest."' },
+      { word: 'was steadily [verb]-ing', desc: 'Adds a temporal depth — the motion was already in progress before the scene began. It has always been true.', ex: '"...the fan was steadily turning, low and continuous, in the corner of the room."' },
+      { word: 'just continued [verb]-ing', desc: '"Just" removes emphasis and naturalizes the motion — it didn\'t restart, it simply never stopped.', ex: '"...and the pendulum just continued swinging, as if the whole question of stopping had never come up."' },
+      { word: 'found itself [verb]-ing', desc: 'Removes the agent entirely — the object didn\'t do anything; it discovered it was already in motion.', ex: '"...the coin found itself spinning on the granite counter before anyone had quite decided anything."' },
+      { word: 'began [verb]-ing and [verb]-ing', desc: 'Chain two -ing verbs to create compounding motion — each one deepens the other without adding complexity.', ex: '"...and the leaf began drifting and rotating on the surface of the slow water."' },
+      { word: 'remained [verb]-ing', desc: 'Stasis inside motion — the object doesn\'t change, which makes the motion feel permanent rather than temporary.', ex: '"...the top remained spinning on the table, long past the point where you\'d expected it to fall."' },
+      { word: 'never stopped [verb]-ing', desc: 'The most explicit form — removes any possibility of interruption. The motion is simply an ongoing condition of the world.', ex: '"...the wheel had never stopped turning, not once since the afternoon began."' },
+    ]
+  }
+};
+
+// ─────────────────────────────────────────────
+//  STATE
+// ─────────────────────────────────────────────
+let handCount = 1;
+let handSize = 6;
+let activeBanks = new Set(Object.keys(BANKS));
+let currentHand = [];
+let focusIndex = 0;
+
+// ─────────────────────────────────────────────
+//  BUILD PILL FILTERS
+// ─────────────────────────────────────────────
+const pillContainer = document.getElementById('filterPills');
+Object.entries(BANKS).forEach(([key, bank]) => {
+  const btn = document.createElement('button');
+  btn.className = 'pill active';
+  btn.dataset.bank = key;
+  btn.textContent = `${bank.label} · ${bank.cat}`;
+  btn.addEventListener('click', () => {
+    if (activeBanks.has(key)) {
+      if (activeBanks.size <= 1) return; // always keep at least one
+      activeBanks.delete(key);
+      btn.classList.remove('active');
+    } else {
+      activeBanks.add(key);
+      btn.classList.add('active');
+    }
+    updateDeckCount();
+  });
+  pillContainer.appendChild(btn);
+});
+
+// ─────────────────────────────────────────────
+//  CARD POOL
+// ─────────────────────────────────────────────
+function getPool() {
+  const pool = [];
+  activeBanks.forEach(key => {
+    BANKS[key].cards.forEach((card, i) => {
+      pool.push({ ...card, bank: key, bankLabel: BANKS[key].label, cat: BANKS[key].cat, color: BANKS[key].color, index: i + 1 });
+    });
+  });
+  return pool;
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Stratified deal: pick cards evenly across all active banks.
+// Round-robins through banks (each shuffled independently), so a hand
+// of 6 with 14 active banks pulls ~1 card per bank rather than
+// over-representing the larger banks.
+function dealStratified(n) {
+  const bankKeys = [...activeBanks];
+  if (bankKeys.length === 0) return [];
+
+  // Shuffle each bank's cards independently
+  const shuffled = {};
+  bankKeys.forEach(key => {
+    shuffled[key] = shuffle(
+      BANKS[key].cards.map((card, i) => ({
+        ...card, bank: key, bankLabel: BANKS[key].label,
+        cat: BANKS[key].cat, color: BANKS[key].color, index: i + 1
+      }))
+    );
+  });
+
+  // Pointers per bank
+  const ptrs = {};
+  bankKeys.forEach(k => ptrs[k] = 0);
+
+  // Shuffle the bank order itself so we don't always start with the same bank
+  const bankOrder = shuffle(bankKeys);
+
+  const result = [];
+  let round = 0;
+  while (result.length < n) {
+    const key = bankOrder[round % bankOrder.length];
+    const ptr = ptrs[key];
+    if (ptr < shuffled[key].length) {
+      result.push(shuffled[key][ptr]);
+      ptrs[key]++;
+    }
+    round++;
+    // Safety: if we've exhausted everything, break
+    if (round > n * bankKeys.length + bankKeys.length) break;
+  }
+
+  // Final shuffle so same-bank cards don't always appear adjacent
+  return shuffle(result);
+}
+
+function updateDeckCount() {
+  const n = getPool().length;
+  document.getElementById('deckCount').textContent = `${n} cards in deck`;
+}
+
+// ─────────────────────────────────────────────
+//  RENDER CARD HTML
+// ─────────────────────────────────────────────
+function cardHTML(card, isFocus = false) {
+  const isPhrase = card.word.length > 16;
+  const cls = isFocus ? 'focus-card' : 'card';
+  const attrs = isFocus ? '' : `data-bank="${card.color}"`;
+  return `
+    <div class="card-header">
+      <span class="card-num">${String(card.index).padStart(2,'0')}</span>
+      <span class="card-cat">${card.cat}</span>
+    </div>
+    <div class="card-word">
+      <h2 class="${isPhrase ? 'phrase' : ''}">${card.word}</h2>
+    </div>
+    <div class="card-footer">
+      <div class="card-desc">${card.desc}</div>
+      <div class="card-example">${card.example || card.ex}</div>
+    </div>
+  `;
+}
+
+// ─────────────────────────────────────────────
+//  DEAL HAND
+// ─────────────────────────────────────────────
+function deal() {
+  currentHand = dealStratified(handSize);
+  handCount++;
+
+  const hand = document.getElementById('hand');
+  hand.innerHTML = '';
+
+  if (currentHand.length === 0) {
+    hand.innerHTML = '<div class="empty-state">No banks selected — enable at least one above.</div>';
+    return;
+  }
+
+  currentHand.forEach((card, i) => {
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.dataset.bank = card.color;
+    div.style.animationDelay = `${i * 0.04}s`;
+    div.innerHTML = cardHTML(card);
+    div.addEventListener('click', () => openFocus(i));
+    hand.appendChild(div);
+  });
+
+  document.getElementById('handInfo').textContent = `HAND ${String(handCount - 1).padStart(3, '0')}`;
+}
+
+// ─────────────────────────────────────────────
+//  FOCUS MODE
+// ─────────────────────────────────────────────
+function openFocus(index) {
+  focusIndex = index;
+  renderFocusCard();
+  document.getElementById('focusOverlay').classList.add('visible');
+}
+
+function renderFocusCard() {
+  const card = currentHand[focusIndex];
+  const fc = document.getElementById('focusCard');
+  // Remove old bank color class
+  fc.removeAttribute('data-bank');
+  fc.setAttribute('data-bank', card.color);
+  fc.style.borderTopColor = '';
+  fc.innerHTML = `
+    <div class="card-header">
+      <span class="card-num">${String(card.index).padStart(2,'0')}</span>
+      <span class="card-cat">${card.cat}</span>
+    </div>
+    <div class="card-word">
+      <h2 class="${card.word.length > 16 ? 'phrase' : ''}">${card.word}</h2>
+    </div>
+    <div class="card-footer">
+      <div class="card-desc">${card.desc}</div>
+      <div class="card-example">${card.ex}</div>
+    </div>
+  `;
+
+  document.getElementById('focusCounter').textContent = `${focusIndex + 1} / ${currentHand.length}`;
+  document.getElementById('focusPrev').disabled = focusIndex === 0;
+  document.getElementById('focusNext').disabled = focusIndex === currentHand.length - 1;
+}
+
+document.getElementById('focusClose').addEventListener('click', () => {
+  document.getElementById('focusOverlay').classList.remove('visible');
+});
+
+document.getElementById('focusOverlay').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('focusOverlay')) {
+    document.getElementById('focusOverlay').classList.remove('visible');
+  }
+});
+
+document.getElementById('focusPrev').addEventListener('click', () => {
+  if (focusIndex > 0) { focusIndex--; renderFocusCard(); }
+});
+
+document.getElementById('focusNext').addEventListener('click', () => {
+  if (focusIndex < currentHand.length - 1) { focusIndex++; renderFocusCard(); }
+});
+
+// Keyboard nav in focus mode
+document.addEventListener('keydown', (e) => {
+  const overlay = document.getElementById('focusOverlay');
+  if (!overlay.classList.contains('visible')) return;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+    if (focusIndex < currentHand.length - 1) { focusIndex++; renderFocusCard(); }
+  }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+    if (focusIndex > 0) { focusIndex--; renderFocusCard(); }
+  }
+  if (e.key === 'Escape') overlay.classList.remove('visible');
+});
+
+// ─────────────────────────────────────────────
+//  HAND SIZE CONTROLS
+// ─────────────────────────────────────────────
+document.getElementById('sizeDown').addEventListener('click', () => {
+  if (handSize > 1) { handSize--; document.getElementById('sizeVal').textContent = handSize; }
+});
+document.getElementById('sizeUp').addEventListener('click', () => {
+  if (handSize < 12) { handSize++; document.getElementById('sizeVal').textContent = handSize; }
+});
+
+// ─────────────────────────────────────────────
+//  DEAL BUTTON + MODE
+// ─────────────────────────────────────────────
+document.getElementById('dealBtn').addEventListener('click', deal);
+document.getElementById('modeBtn').addEventListener('click', () => {
+  if (currentHand.length === 0) return;
+  openFocus(0);
+});
+
+// ─────────────────────────────────────────────
+//  INIT
+// ─────────────────────────────────────────────
+updateDeckCount();
+deal();
+</script>
+</body>
+</html>
