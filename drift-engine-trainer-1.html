@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<div style="text-align: center;">
-  <a href="https://discord.gg/3CFwfGrUrd" target="_blank" rel="noopener noreferrer">Join the Discord for more resources</a>
-</div>
-
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Drift Engine — Training Deck</title>
@@ -558,6 +553,41 @@
     font-size: 1rem;
   }
 
+  /* ── Discord button ── */
+  .discord-bar {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .discord-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: hsl(230, 70%, 80%);
+    background: hsla(230, 60%, 20%, 0.5);
+    border: 1px solid hsl(230, 45%, 35%);
+    padding: 0.55rem 1.4rem 0.55rem 1.1rem;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .discord-btn:hover {
+    background: hsla(230, 60%, 25%, 0.8);
+    border-color: hsl(230, 60%, 55%);
+    color: hsl(230, 90%, 90%);
+    box-shadow: 0 0 18px hsla(230, 70%, 50%, 0.18);
+  }
+  .discord-btn svg {
+    width: 14px; height: 14px;
+    fill: currentColor;
+    flex-shrink: 0;
+    opacity: 0.85;
+  }
+
   /* ── Focus mode overlay ── */
   .focus-overlay {
     display: none;
@@ -709,6 +739,13 @@
     <h1>Training Deck</h1>
     <p>Shuffle the banks. Build the sentences. Carry it in your head.</p>
   </header>
+
+  <div class="discord-bar">
+    <a class="discord-btn" href="https://discord.gg/3CFwfGrUrd" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+      Join the community
+    </a>
+  </div>
 
   <!-- Controls -->
   <div class="controls">
@@ -876,6 +913,16 @@ const BANKS = {
       { word: 'whereas', desc: 'Draws a quiet contrast that reframes — the listener sees the difference without being told what to do with it.', ex: '"...whereas the first room had been still, this one held a low, continuous hum."' },
       { word: 'as if', desc: 'Invites the mind to simulate a state through hypothetical reality — more vivid than description, more flexible than assertion.', ex: '"...and the floor seemed to give just slightly, as if the whole building had exhaled."' },
       { word: 'as though', desc: 'Slightly more formal than as if — offers a simile at the level of felt truth rather than observation.', ex: '"...the silence had a texture to it, as though the room were holding something in reserve."' },
+      { word: 'in the moment that', desc: 'A longer, more deliberate version of "the moment" — slows the pivot so the listener lives inside it.', ex: '"...in the moment that the latch gave, the door began to drift open of its own accord."' },
+      { word: 'by the time that', desc: 'Like "by the time" but softer — the delay is implied without insisting on it.', ex: '"...by the time that the candle had burned down to its halfway mark, the room felt entirely different."' },
+      { word: 'in such a way that', desc: 'Links manner to outcome — the way something happens is the cause of what follows.', ex: '"...the water moved in such a way that the light on the ceiling kept shifting with it."' },
+      { word: 'to the point where', desc: 'Describes accumulation reaching a threshold — the listener is inside the threshold before they notice.', ex: '"...and the sound had deepened to the point where it was easier not to think about anything else."' },
+      { word: 'at the same time', desc: 'Creates simultaneity in plain language — two things occupy the same moment without requiring the listener to hold both consciously.', ex: '"...the wheel kept turning, and at the same time something in the room had begun to settle."' },
+      { word: 'as a result', desc: 'Implies causality without specifying what caused what — the listener supplies the logic and therefore owns the conclusion.', ex: '"...and as a result, the afternoon had taken on a quality it hadn\'t had when we first arrived."' },
+      { word: 'which means', desc: 'Draws an inference the listener now inherits — whatever the implication is, it was already waiting.', ex: '"...the door kept drifting open on its own, which means the room was never quite sealed."' },
+      { word: 'so that', desc: 'Links action to purpose — the motion has always been going somewhere, and the listener is already there.', ex: '"...the window stayed open just enough so that the curtain could keep moving in the slow air."' },
+      { word: 'in the same way that', desc: 'Creates an analogy without declaring it — the comparison works below the threshold of argument.', ex: '"...the candle flame recovered from the draft in the same way that everything eventually finds its level."' },
+      { word: 'provided that', desc: 'Conditions a state on something already true — the state is therefore already in effect.', ex: '"...provided that you stay with the motion, the room keeps its quality of suspension."' },
     ]
   },
 
@@ -899,6 +946,17 @@ const BANKS = {
       { word: 'if you could imagine', desc: 'Opens a collaborative space — the listener is now co-constructing the state rather than receiving it.', ex: '"...if you could imagine a weight that had no source, that\'s something like what the air felt like."' },
       { word: 'for reasons you can\'t entirely explain', desc: 'Normalizes the inexplicable — tells the listener that not understanding is the correct response.', ex: '"...for reasons you can\'t entirely explain, the wheel kept your attention longer than it had any right to."' },
       { word: 'not quite, but close to', desc: 'A deliberate approximation — the precision of the miss is what makes the comparison vivid.', ex: '"...not quite sleep, but close to it — the kind of stillness where the body stops reporting in."' },
+      { word: 'the way things do', desc: 'Naturalizes any process by invoking universal pattern — the listener agrees because it is generally true.', ex: '"...and the room had shifted, the way things do when you stop watching for it."' },
+      { word: 'in a manner of speaking', desc: 'Hedges a metaphor so gracefully that the metaphor does all its work before the disclaimer lands.', ex: '"...in a manner of speaking, the whole afternoon had already decided how it would end."' },
+      { word: 'you might say', desc: 'Invites the listener to author the statement — if they would say it, they already believe it.', ex: '"...you might say the room had been waiting, though waiting implies something more deliberate."' },
+      { word: 'a kind of', desc: 'Introduces a category without fully defining it — the listener completes the definition from inside their own experience.', ex: '"...there was a kind of stillness in the corner that the rest of the room organized itself around."' },
+      { word: 'as it were', desc: 'A formal hedge that creates permission — the listener knows a metaphor is coming and relaxes their resistance.', ex: '"...the whole afternoon had folded into itself, as it were, leaving only the present moment available."' },
+      { word: 'in a sense', desc: 'Signals that what follows is true at a level below ordinary speech — the listener leans in to find that level.', ex: '"...in a sense, the door had never been fully closed — not since the afternoon began."' },
+      { word: 'what felt like', desc: 'Grounds the claim in felt experience — the critical mind has no authority over what something felt like.', ex: '"...what felt like hours had passed inside what the clock insisted was only a few minutes."' },
+      { word: 'you could call it', desc: 'Places the naming act in the listener — they are now choosing the word, which means they chose the concept.', ex: '"...you could call it relief, or you could call it the room simply finding its level."' },
+      { word: 'the closest I can get to describing it', desc: 'Tells the listener that language falls short — their interior experience is richer than any description, which makes it so.', ex: '"...the closest I can get to describing it is a warmth that arrives without a source."' },
+      { word: 'without being entirely sure why', desc: 'Removes the need for a reason — the listener is inside the state before the explanation would arrive anyway.', ex: '"...and without being entirely sure why, the room felt like the right place to stop moving."' },
+      { word: 'before I quite realized', desc: 'Presupposes a shift that already happened — the noticing comes after the change, not before.', ex: '"...before I quite realized it, the afternoon had already taken on a different quality."' },
     ]
   },
 
@@ -927,6 +985,17 @@ const BANKS = {
       { word: 'transformation', desc: 'Names the change process as an object — implies it is already underway, already in motion.', ex: '"...there was a transformation happening in the way the light fell across the counter."' },
       { word: 'wisdom', desc: 'Locates knowing in the body and history rather than the reasoning mind — the listener already has it.', ex: '"...and there was a wisdom in the way it had been arranged that I hadn\'t noticed the first time."' },
       { word: 'possibility', desc: 'Opens a space without filling it — the listener\'s imagination enters and furnishes it.', ex: '"...there was a possibility the afternoon hadn\'t had before — faint, but real, the way openings are."' },
+      { word: 'attention', desc: 'Names the faculty itself as a noun that can be given, held, or released — the listener locates theirs.', ex: '"...there was an attention in the room that had nothing to do with anyone looking at anything."' },
+      { word: 'stillness', desc: 'Makes the absence of motion into a presence — something that is there, not merely the lack of something else.', ex: '"...and the stillness that followed had weight to it, a quality of having been earned."' },
+      { word: 'depth', desc: 'Implies a dimension that is present but unmeasured — the listener reaches inward to locate it.', ex: '"...there was a depth to the afternoon that hadn\'t been available at the start of it."' },
+      { word: 'knowing', desc: 'Names a certainty that precedes words — the listener locates a felt sense that is already there.', ex: '"...and there was a knowing that arrived before any particular thought about what it meant."' },
+      { word: 'ease', desc: 'The process of difficulty ending, frozen into a noun — already arrived, already true.', ex: '"...there was an ease in the room that made the whole afternoon feel like it had been arranged."' },
+      { word: 'readiness', desc: 'Implies preparation that is already complete — the listener is already in position for what comes next.', ex: '"...there was a readiness I hadn\'t brought into the room, but found there when I arrived."' },
+      { word: 'warmth', desc: 'A sensory nominalization — a quality that can be received without being generated.', ex: '"...there was a warmth to the room that had nothing to do with the temperature exactly."' },
+      { word: 'interest', desc: 'Names curiosity as a thing already present — not an instruction to be curious but a discovery of it.', ex: '"...and there was this interest that had been building, quietly, underneath the whole conversation."' },
+      { word: 'balance', desc: 'Implies an equilibrium that has been found rather than imposed — everything is already in its right place.', ex: '"...there was a balance in the room between the sound and the light that made movement feel unnecessary."' },
+      { word: 'surrender', desc: 'The letting-go framed as a noun already in the room — the listener finds it rather than performing it.', ex: '"...and there was a surrender in the quality of the afternoon that had nothing to do with losing."' },
+      { word: 'permission', desc: 'Names the releasing of an inner constraint — something that was held is now available to be put down.', ex: '"...and there was a permission in the silence that I hadn\'t had at the start of the afternoon."' },
     ]
   },
 
@@ -950,6 +1019,17 @@ const BANKS = {
       { word: 'wonder', desc: 'Suspends judgment in favor of curiosity — creates a mild trance state through the posture of open questioning.', ex: '"...and you begin to wonder, without quite aiming the wondering at anything in particular."' },
       { word: 'process', desc: 'Implies interior activity below the level of conscious direction — something is working without being told to.', ex: '"...and somewhere beneath the surface, you process it — the whole of it — at whatever pace works."' },
       { word: 'perceive', desc: 'Slightly more formal — creates a sense of careful, deliberate attending that itself deepens the state.', ex: '"...and you begin to perceive a quality in the room that hadn\'t been available before."' },
+      { word: 'let go', desc: 'The most direct release verb — but placed in a context, not as a command, so it arrives rather than instructing.', ex: '"...and somewhere in the afternoon, you let go of something you hadn\'t quite known you were holding."' },
+      { word: 'find', desc: 'Implies the thing was already there — the listener discovers rather than creates.', ex: '"...and you find, without having looked for it, a quality in the room that had been waiting."' },
+      { word: 'move toward', desc: 'Creates gentle forward motion without specifying a destination — the listener supplies where they are moving.', ex: '"...and something in you begins to move toward a kind of stillness you hadn\'t quite reached before."' },
+      { word: 'hold', desc: 'Implies cradling something interior — a quiet, attentive stillness that is doing something even as it rests.', ex: '"...and you hold it, for a moment, the way you hold a sound that is just finishing."' },
+      { word: 'expand into', desc: 'Suggests growing into a space that was already available — the listener fills what was waiting for them.', ex: '"...and you begin to expand into a quiet that the room had been holding open."' },
+      { word: 'return to', desc: 'Implies a prior state — the listener is finding something familiar, not something new.', ex: '"...and slowly, without effort, you begin to return to a place that has always been available."' },
+      { word: 'follow', desc: 'The simplest tracking verb — the listener goes where the motion goes, which requires no decision.', ex: '"...and you follow it, the way you follow a river, not knowing where it leads but going anyway."' },
+      { word: 'attend to', desc: 'A quiet, formal attending — creates the posture of deep listening that itself produces the state.', ex: '"...and you attend to it, the way you attend to a sound that is almost too faint to name."' },
+      { word: 'trust', desc: 'Applied as a verb, not a noun — the act of trusting is itself the experience, not a conclusion reached afterward.', ex: '"...and you trust it, the way you trust a surface that holds weight without announcing it."' },
+      { word: 'rest in', desc: 'Places the listener inside a state the way you rest in a chair — already there, already supported.', ex: '"...and you rest in it, whatever it is, without needing to name it or move from it."' },
+      { word: 'carry', desc: 'Implies the state has weight and can be transported — it will still be there when the listener leaves the room.', ex: '"...and you carry it with you, the way you carry a quality of light from one room to the next."' },
     ]
   },
 
@@ -1004,6 +1084,23 @@ const BANKS = {
       { word: 'backlit',       cat: 'Light / Shadow',      desc: 'Source behind the object — edges glow, interiors go dark, and the viewer experiences the object as outline rather than mass.', ex: '"...the figure in the doorway was backlit, pale-edged, and impossible to quite make out."' },
       { word: 'iridescent',    cat: 'Light / Shadow',      desc: 'Color that isn\'t fixed — the mind keeps trying to name it and can\'t, which holds attention in a kind of pleasant suspension.', ex: '"...the surface of the puddle had an iridescent, thin, continuously-shifting quality."' },
       { word: 'low-glow',      cat: 'Light / Shadow',      desc: 'Light at its minimum — just enough to see by, which makes everything beyond the lit area feel important.', ex: '"...the hallway had a low-glow, amber, barely-lit quality that asked you to slow down."' },
+      { word: 'pellucid',      cat: 'Sensory Adj.',        desc: 'Clear to the point of invisibility — the thing you see through it matters more than it does.', ex: '"...the glass had a pellucid, thin, almost absent quality that made the room behind it seem closer."' },
+      { word: 'hushed',        cat: 'Atmospheric',         desc: 'Sound reduced to near-nothing — the room is holding its breath, and the listener holds theirs with it.', ex: '"...the whole corridor had a hushed, carpeted, expectant quality, as if a performance were about to begin."' },
+      { word: 'luminous',      cat: 'Sensory Adj.',        desc: 'Light held within a surface, not cast from above — the object glows from the inside out.', ex: '"...the shell had a luminous, pale, self-contained quality that made it seem lit from somewhere inside."' },
+      { word: 'sun-drenched',  cat: 'Atmospheric',         desc: 'Total saturation — the scene is completely held by warm light, with no shadow left to hide in.', ex: '"...the courtyard had a sun-drenched, warm, slightly blinding quality that made everything else feel distant."' },
+      { word: 'hollow',        cat: 'Atmospheric',         desc: 'Emptiness that has a shape — space defined by the absence at its center.', ex: '"...the old barn had a hollow, echoing, wide quality that made every small sound feel significant."' },
+      { word: 'featherlight',  cat: 'Texture / Tactile',   desc: 'Weight reduced to almost nothing — the object is present but refuses to impose.', ex: '"...the fabric had a featherlight, thin, almost-not-there quality that you noticed most when it moved."' },
+      { word: 'cool-smooth',   cat: 'Texture / Tactile',   desc: 'Two tactile qualities fused — the combination delivers a complete sensory hit in two words.', ex: '"...the surface had a cool-smooth, unbroken, marble quality that the hand kept returning to."' },
+      { word: 'dense',         cat: 'Sensory Adj.',        desc: 'Weight without heaviness — a quality of fullness and resistance that the eye encounters before the hand does.', ex: '"...the air had a dense, warm, close quality that slowed everything that moved through it."' },
+      { word: 'thin',          cat: 'Sensory Adj.',        desc: 'Reduced to its minimum — transparent, fragile, barely enough, which makes everything that passes through it precious.', ex: '"...the light at that hour had a thin, pale, almost apology quality, just enough to see by."' },
+      { word: 'suspended',     cat: 'Flow / Movement',     desc: 'Held between two states with no downward pressure — neither falling nor flying, simply hanging there.', ex: '"...the dust in the beam had a suspended, patient, neither-rising-nor-falling quality."' },
+      { word: 'languid',       cat: 'Flow / Movement',     desc: 'Slow motion that implies warmth — the movement is unhurried because everything is at the right temperature.', ex: '"...the afternoon had a languid, unhurried, heavy quality that made the clock seem optional."' },
+      { word: 'woven',         cat: 'Texture / Tactile',   desc: 'Interlaced, structured, holding itself together through its own pattern — the complexity is the thing.', ex: '"...the rug had a woven, thick, patterned quality that made the room feel considered."' },
+      { word: 'glassy',        cat: 'Sensory Adj.',        desc: 'A surface that both reflects and transmits — the observer is partially inside what they are looking at.', ex: '"...the lake had a glassy, still, mirror quality that made the sky and the water indistinguishable."' },
+      { word: 'smoke-grey',    cat: 'Light / Shadow',      desc: 'A color that is also a texture — not quite a solid, not quite an absence.', ex: '"...the clouds had a smoke-grey, soft, indeterminate quality that made the light below them flat."' },
+      { word: 'charged',       cat: 'Emotional-State',     desc: 'The air before something — a potential that has not yet released. The listener waits inside it without knowing what for.', ex: '"...the room had a charged, quiet, before-something quality, the way rooms do before weather changes."' },
+      { word: 'intimate',      cat: 'Emotional-State',     desc: 'Shrinks the perceived space — brings the listener and the scene into close proximity, which is exactly where drift operates.', ex: '"...the corner of the library had an intimate, low-lit, close quality that made the rest of the building irrelevant."' },
+      { word: 'expectant',     cat: 'Emotional-State',     desc: 'The room is leaning forward — everything is positioned for something that has not arrived yet, which keeps attention present.', ex: '"...the stage had an expectant, hushed, leaning-forward quality, though no one was on it yet."' },
     ]
   },
 
@@ -1022,6 +1119,15 @@ const BANKS = {
       { word: 'beforehand', desc: 'References preparation that already happened — the listener has already been ready for what\'s coming.', ex: '"...beforehand, something in the room had shifted that made the whole afternoon feel arranged."' },
       { word: 'shortly', desc: 'Very near future — creates a gentle forward lean toward an event that is about to resolve.', ex: '"...and shortly, the motion will find its natural edge, and everything will settle at once."' },
       { word: 'unexpectedly', desc: 'Names the quality of surprise without the shock — the event arrived, the listener is inside it, and it turns out to be fine.', ex: '"...unexpectedly, a quiet had settled over the whole thing that made the rest easy."' },
+      { word: 'in due course', desc: 'Implies inevitability without urgency — whatever is coming will arrive, and the only question is when.', ex: '"...and in due course, the motion found its natural resting point and everything settled."' },
+      { word: 'presently', desc: 'A soft future marker — not "soon" but "in a while that is already beginning to close."', ex: '"...presently, the room began to feel different, though nothing visible had changed."' },
+      { word: 'at some point', desc: 'Unanchored in time — the event is real but its location is deliberately vague, which keeps the listener searching.', ex: '"...at some point, the quality of the afternoon had shifted without announcing itself."' },
+      { word: 'in the time it takes', desc: 'Links a state to a duration the listener supplies — their clock, not yours.', ex: '"...in the time it takes to notice you\'ve stopped noticing, the room had already done its work."' },
+      { word: 'as time passed', desc: 'The most neutral temporal marker — no direction, no urgency, just duration doing what duration does.', ex: '"...and as time passed, the distinction between the two states became harder to maintain."' },
+      { word: 'long before', desc: 'Pushes the origin point further back than expected — the state was always already in motion.', ex: '"...long before I noticed anything unusual, the room had begun its slow and quiet rearrangement."' },
+      { word: 'ever so gradually', desc: 'Slows time to a near-stop — the listener enters the slow frame and waits inside it.', ex: '"...ever so gradually, the light in the room had been changing since we first arrived."' },
+      { word: 'right at the moment', desc: 'Collapses time to a single point — everything pivots there, and the listener is already inside the pivot.', ex: '"...right at the moment the candle caught, the whole quality of the room shifted."' },
+      { word: 'as it turned out', desc: 'Retrospective framing — implies the state was always the case, and the listener is now catching up to what was always true.', ex: '"...as it turned out, the room had been arranged exactly this way for longer than anyone had realized."' },
     ]
   },
 
@@ -1051,6 +1157,16 @@ const BANKS = {
       { word: 'began flickering and swelling', desc: 'Two verbs, two rhythms — the listener tracks both, which fully occupies the surface of attention.', ex: '"...the light began flickering and swelling against the far wall, in a slow alternating pulse."' },
       { word: 'remained spinning',        desc: 'Stasis inside motion — the object doesn\'t change, which makes the motion feel permanent rather than temporary.', ex: '"...the top remained spinning on the table long past the point where you\'d expected it to fall."' },
       { word: 'never stopped turning',    desc: 'The most explicit form — removes any possibility of interruption. The motion is simply an ongoing condition of the world.', ex: '"...the wheel had never stopped turning, not once, not since the whole afternoon began."' },
+      { word: 'kept swaying',             desc: 'Side to side, gentle and tidal — the motion implies something breathing at its own rhythm.', ex: '"...and the lantern kept swaying at the end of its hook, even after the wind had stopped."' },
+      { word: 'kept pulsing',             desc: 'A heartbeat rhythm — regular enough to entrain, subtle enough not to demand attention.', ex: '"...the light kept pulsing against the ceiling, faint and regular, like something breathing in the walls."' },
+      { word: 'kept unfolding',           desc: 'Each moment reveals the next — the listener is always mid-opening, never at the end of a thing.', ex: '"...and the sensation kept unfolding, one layer after another, deeper than I\'d expected to go."' },
+      { word: 'kept settling',            desc: 'Things finding their right place — the motion implies arrival without quite arriving.', ex: '"...and the dust kept settling, slowly, into the surfaces the room had been offering it."' },
+      { word: 'kept pulling',             desc: 'A directional force without a visible source — the listener is already moving toward something.', ex: '"...and the current kept pulling, gently, toward the center of the river where the water ran fastest."' },
+      { word: 'was quietly dissolving',   desc: '"Quietly" and "dissolving" together — the boundary between states is softening without any event marking the change.', ex: '"...the tension in the room was quietly dissolving, the way morning fog dissolves before you notice it\'s gone."' },
+      { word: 'was slowly becoming',      desc: 'Transformation in progress — the destination is unnamed, which keeps the listener watching for it.', ex: '"...and the afternoon was slowly becoming something that didn\'t have a name yet."' },
+      { word: 'had been turning all along', desc: 'Retrospective continuous — the motion was always happening; the listener simply wasn\'t attending to it.', ex: '"...and the wheel had been turning all along, quietly, at the edge of what I\'d been paying attention to."' },
+      { word: 'kept weaving',             desc: 'Motion that interlaces — the thing is threading through something, and the result is a structure being built.', ex: '"...and the smoke kept weaving through the still air, finding paths through it no one had mapped."' },
+      { word: 'began slowly opening',     desc: 'Gradual dilation — the space or the state is widening at its own pace, not yours.', ex: '"...and the door began slowly opening, on its own, as if the room on the other side had decided to invite."' },
     ]
   }
 };
@@ -1074,6 +1190,15 @@ const ADVERBS = [
   { word: 'endlessly',    cat: 'Adverb', color: 'b5adv', index: 13, desc: 'The strongest form — implies no boundary. The motion will not stop because stopping is not part of its nature.', ex: '"...and the river kept moving, endlessly, as it had before any of us arrived and would after."' },
   { word: 'almost imperceptibly', cat: 'Adverb', color: 'b5adv', index: 14, desc: 'At the very threshold of perception — the listener leans in to catch what they might otherwise miss.', ex: '"...the hand was moving, almost imperceptibly, but moving, in a slow continuous arc."' },
   { word: 'rather brightly', cat: 'Adverb', color: 'b5adv', index: 15, desc: 'Two-word intensifier that feels casual and spoken — the "rather" softens, the "brightly" lands. Natural in the mouth.', ex: '"...the lightbulb was flickering rather brightly inside the dense microwave, warm and continuous."' },
+  { word: 'imperceptibly',  cat: 'Adverb', color: 'b5adv', index: 16, desc: 'Below the threshold of detection — the change is real but the listener can\'t catch it happening.', ex: '"...and the wheel had been slowing, imperceptibly, for longer than anyone had been watching."' },
+  { word: 'persistently',   cat: 'Adverb', color: 'b5adv', index: 17, desc: 'Implies the motion has been refused the right to stop — it continues not by force but by nature.', ex: '"...and the sound persisted, persistently, in the corner of the room where the walls met."' },
+  { word: 'inexorably',     cat: 'Adverb', color: 'b5adv', index: 18, desc: 'Cannot be stopped or reasoned with — the motion obeys its own necessity, not yours.', ex: '"...the tide kept rising, inexorably, the way things rise when they have decided to."' },
+  { word: 'inwardly',       cat: 'Adverb', color: 'b5adv', index: 19, desc: 'Directs the motion toward an interior — the listener locates the experience inside themselves automatically.', ex: '"...and something had been shifting, inwardly, from the moment the sound first reached the room."' },
+  { word: 'unhurriedly',    cat: 'Adverb', color: 'b5adv', index: 20, desc: 'Time itself seems to slow — the motion has nowhere to be, and neither does the listener.', ex: '"...the smoke rose, unhurriedly, as if the ceiling were a long way off and in no hurry to arrive."' },
+  { word: 'silently',       cat: 'Adverb', color: 'b5adv', index: 21, desc: 'Removes sound from the motion — the visual is all that remains, which deepens the interior quiet.', ex: '"...and the wheel kept turning, silently, on its bearing, without the friction that would make it real."' },
+  { word: 'almost without noticing', cat: 'Adverb', color: 'b5adv', index: 22, desc: 'Names the quality of peripheral experience — something happened, and the listener was barely there for it.', ex: '"...and you find yourself, almost without noticing, in a different quality of the afternoon than before."' },
+  { word: 'with each passing moment', cat: 'Adverb', color: 'b5adv', index: 23, desc: 'Time is doing the work — the listener simply waits, and the state deepens on its own.', ex: '"...and with each passing moment, the distinction between the two states becomes a little less clear."' },
+  { word: 'barely perceptibly', cat: 'Adverb', color: 'b5adv', index: 24, desc: 'Right at the edge of awareness — the listener strains to confirm what they half-noticed, which holds them in.', ex: '"...the needle was moving, barely perceptibly, in a direction I hadn\'t expected it to go."' },
 ];
 
 // ─────────────────────────────────────────────
@@ -1337,6 +1462,4 @@ updateDeckCount();
 deal();
 </script>
 </body>
-<a href="https://discord.gg/3CFwfGrUrd" target="_blank" rel="noopener noreferrer">Join the Discord</a>
-
 </html>
